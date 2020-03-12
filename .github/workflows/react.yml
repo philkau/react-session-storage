@@ -1,0 +1,39 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: react
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches: [ master ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [8.x, 10.x, 12.x]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm ci
+    - name: Install Packages
+      run: npm install
+    - name: Deploy to GH Pages
+      run: npm run deploy
+    - name: Test
+      run: npm test
+      env:
+        CI: true
+    - name: Deploy to GH Pages
+      run: |
+        git config --global user.email "your_github_email>"
+        git config --global user.name "your_github_username>"
+        git remote set-url origin https:/6fd4795546a53fa69abf38b83320e67cd5d24539>@github.com/philkau>/react-session-storage>.git
+        npm run deploy
+  
